@@ -11,6 +11,6 @@ In this workshop, we're going to convert a static Sketch mockup into an interact
 
 1. [OS X] Install the free trial of [Sketch](https://www.sketchapp.com/static/download/sketch.zip)
 2. [OS X] Install the free trial of [Framer Studio](http://framerjs.com/download/)
-3. [OS X] Download Apple's free [San Francisco Fonts](new link), unzip the file and install them in `/Library/Fonts`
+3. [OS X] Download Apple's free [San Francisco Fonts](https://github.com/misterburton/framer-lvl-workshop/raw/master/_assets/SFUI.zip), unzip the file and install them in `/Library/Fonts`
 4. [iOS] Install the new [Framer Preview app](https://itunes.apple.com/app/id1124920547)
 
