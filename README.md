@@ -120,7 +120,7 @@ What we just added, in programming terminology, is called a _click event._ How i
 2. Make sure both your iPhone and Mac are on the same Wi-Fi network
 3. Open the `Framer` app on your iPhone
 4. You should see a thumbnail of your project w/ its file name listed beneath; click to open it
-5. You will be prompted to enter an access code from Framer Studio. Click the `Mirror` button just above the center column in Framer Studio _**on your Mac**_ and enter the code shown into the Framer app on your phone:
+5. You will be prompted to enter an access code from Framer Studio. Click the `Mirror` button just above the center column in Framer Studio _**on your Mac**_ and enter the code shown into the Framer app on your phone (_Note: your access code will be different from the one listed below_):
 
 ![access code](images/access-code.png)
 
@@ -140,17 +140,17 @@ For our `stateB` values, I've chosen a blue background color, `8.00` for the sca
 
 ![state b](images/state-b.png)
 
-Now, when you interact with your layer, you'll see it cycle through its 3 states — default, `stateA` and `stateB` — each time you click. To see this on your phone, Save your file (⌘ + S) in Framer Studio w/ your prototype open on your phone, and you should see a blue load bar on the top of the phone to indicate that your changes have been published and it is reloading)
+Now, when you interact with your layer, you'll see it cycle through its 3 states — default, `stateA` and `stateB` — each time you click. To see this on your phone, save your file (⌘ + S) in Framer Studio w/ your prototype open on your phone. You should see a blue load bar across the top of the Framer app on your phone to indicate that your changes have been published and the prototype is reloading.
 
-### Fine tuning state control
+### Fine tuning states and transitions
 
-Change the last line in our code from:
+Now that we have three states to work with, change the last line in our code from:
 
 ```
 layerA.states.next()
 ```
 
-To:
+To instead read:
 
 ```
 layerA.states.next('stateA', 'stateB')
