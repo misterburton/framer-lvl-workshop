@@ -19,7 +19,8 @@ In day one of this workshop, we're going to cover the basics of Framer studio. O
 
 ### Getting Started
 
-* Open Framer studio, and choose `File > New` From the top menu to create a new prototype. If you do not immediately see an iPhone 6s on the righthand side of the app, choose `Device > Apple iPhone 6s > iPhone 6s Silver`.
+* Open Framer studio, and choose `File > New` from the top menu to create a new prototype.
+* If you do not immediately see an iPhone 6s on the righthand side of the app, choose `Device > Apple iPhone 6s > iPhone 6s Silver`.
 	* _The color of your iPhone frame doesn't really natter, but I choose silver for its contrast w/ the phone's black screen)_
 * Choose `File > Save` and save the project as `day-one.framer` on your desktop.
 	* _Worth noting: saving your project creates a folder called `day-one.framer`, rather than an individual file. This folder can be dragged onto the Framer Studio icon to open, or opened from Framer's `File > Open` menu.)_
@@ -173,9 +174,160 @@ As you can see, our transitions now move a bit more quickly. Animation duration 
 
 ## Day 2:
 
+### Overview
+
+Animated shapes are fun & all, but let's make a real prototype.
+
 ### Setup
 
-Download project assets **NEED LINK for all assets, not just fonts**
+* Download day two workshop assets [here](https://github.com/misterburton/framer-lvl-workshop/raw/master/_assets/workshop-assets.zip)
+* Unzip `workshop-assets.zip`
+* Place the `SF UI` folder in `Hard Drive > Library > Fonts`
+* Open the `day-two-ui.sketch` file in Sketch
+
+### Sketch File Overview
+
+#### Design:
+
+![Sketch Artboards](images/artboards.png)
+
+* Our prototype will transition between two views, `home_page` & `detail_page`
+* Active click/tap areas are blue, black/grey areas are not
+* The top status bar & bottom nav bars will be made to persist in code, so we only need them on the first (home_page) artboard.
+
+#### Layers:
+
+![Sketch Artboards](images/layer-order.png)
+
+* **Layer names:** use underscores in lieu of spaces or hyphens for consistency as Framer will rename them using underscores
+* **Layers arrangement:** top-to-bottom as they appear in the artboard (personal preference - easier to visually reference in framer)
+* **Sketch symbols:** Right click each and choose `Detach from Symbol` as Framer can't read these. This action converts symbols to layer groups.
+* **Layer groups:** groups will be flattened into a single layers. These can then be referenced in code by their group name
+
+> _Note: if you have made any adjustments to the file, make sure it is saved in its current state and that Sketch is not hidden before importing it into Framer Studio._
+
+### Creating our Framer Prototype
+
+* Open Framer studio, and choose `File > New` from the top menu to create a new prototype.
+* If you do not immediately see an iPhone 6s on the righthand side of the app, choose `Device > Apple iPhone 6s > iPhone 6s Silver`.
+* Click `Import`, choose `@2x` from the drop menu and click `import` to bring `day-two-ui.sketch` into Framer Studio.
+
+You should now see the following code denoting your imported file:
+
+```
+# Import file "day-two-ui" (sizes and positions are scaled 1:2)
+sketch = Framer.Importer.load("imported/day-two-ui@2x")
+```
+
+> _Note: the line beginning with a `#` is a code comment. These are helpful messages that are ignored by our prototype._
+
+* You should also see the hierarchy of your artboard & layer structure in Framer's center column, and the design on the iPhone's screen.
+
+![Layer hierarchy](images/layer-hierarchy.png)
+
+* These layers will now be accessible via Framer's `Insert` menu for adding states and events, just as manually created layers are. These layers and groups also retain the hierarchy they had in Sketch. So, if we move `detail_page` in Framer, everything beneath it moves, as well. You can roll over layer names to see them highlighted in Framer's design view, even if they are off the stage.
+
+* With this in mind, and speaking of our `detail_page`, if you roll over it, you can see it's a little too far to the right. We want it right up against the right side of the screen and ready to animate when we transition from the home page to our detail page.
+
+* We need a state for this. Choose `Insert > State > detail_page`. Now, using the center column, set its x Position to 750, like this:
+
+![Detail X Position](images/detail-xpos.png)
+
+* Now, we need one line of code to instantly set our `detail_page` to this state, with no animation or transition. Add this code beneath your state code, and be sure it's not indented:
+
+```
+# set initial detail_page position
+sketch.detail_page.states.switchInstant("stateA")
+```
+
+* If you now mouse over `detail_page` in Framer's center column, you'll see that it's right where we want it, ready to be transitioned into view.
+
+* To be sure we're aligned, the whole of your prototype's code should now read:
+
+```
+# Import file "day-two-ui" (sizes and positions are scaled 1:2)
+sketch = Framer.Importer.load("imported/day-two-ui@2x")
+
+sketch.detail_page.states.add
+	stateA:
+		x: 750
+
+# set initial detail_page position
+sketch.detail_page.states.switchInstant("stateA")
+```
+
+* First, we're importing the Sketch file, we're then creating `stateA` where our `detail_page` is at `750`, and lastly, we're immediately setting that state with Framer's `switchInstant` command.
+
+* We now need a new state where `detail_page` is in view, or at `0` x Position. Using our `Insert > State > detail_page` command, add a new state, and using the center column, add set the position to `0`. Its automatically inserted code should read:
+
+```
+stateB:
+	x: 0
+```
+
+* Now, let's add some interactivity to our blue `layer_one` button on the `home_page` to slide our detail page into view. Choose `Insert > Event > label_one > Click > Click` and paste the following code beneath the resulting `sketch.label_one.onClick…` code:
+
+```
+sketch.detail_page.states.switch("stateB")
+```
+
+* Our full `label_one` Click event code should now read:
+
+```
+sketch.label_one.onClick (event, layer) ->
+	sketch.detail_page.states.switch("stateB")
+```
+
+* This tells Framer, when a Click is detected on our `label_one` layer, `detail_page` should now transition to `stateB`. Save your prototype & click the blue text button to see our `detail_page` come flying in.
+
+* It's now time to add a state for our `home_page` to get out of the way when the `detail_page` makes its entrance. Choose `Insert > States > home_page` and set its position to `-750`.
+
+* Repeat this process and add another state for our `home_page` where its position is 0. Your full `home_page` states code should read:
+
+```
+sketch.home_page.states.add
+	stateA:
+		x: -750
+	stateB:
+		x: 0
+```
+
+* Add the following line to our `label_one` Click Event code: `sketch.home_page.states.switch("stateA")`. The entire event should now read:
+
+```
+sketch.label_one.onClick (event, layer) ->
+	sketch.detail_page.states.switch("stateB")
+	sketch.home_page.states.switch("stateA")
+```
+
+* Now, when we click our blue label button on the home page, we see the `home_page` exit to the left as our `detail_page` makes its entrance.
+
+* Functionality-wise, all that's left is to afford our `back_button` layer on the Detail page the same functionality, only backwards. Choose `Insert > Event > back_button > Click > Click`, and add the following two lines of code to our resulting Click event:
+
+```
+	sketch.detail_page.states.switch("stateA")
+	sketch.home_page.states.switch("stateB")
+```
+
+* You should now be able to transition from the Home to the Detail page and back again using our two active buttons to which we've applied Click Events. All that's now left to apply is a little polish.
+
+* First off, we want our `status_bar` and `bottom_tab_bar` layers to persist throughout, just as they would on a real iOS app. To achieve this, add the following two lines of code:
+
+```
+# make status & nav bars persistent
+sketch.status_bar.superLayer = Framer.Device.screen
+sketch.bottom_tab_bar.superLayer = Framer.Device.screen
+```
+
+* Now, all that's left is our transition — it's freakishly slow. The following two lines of code will set us right:
+
+```
+# set our global transition animation time
+Framer.Defaults.Animation =
+    time: .4
+```
+
+Disco.
 
 ***
 
