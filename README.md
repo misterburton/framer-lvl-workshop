@@ -227,6 +227,7 @@ Animated shapes are fun & all, but let's make a real prototype.
 ### Creating our Framer Prototype
 
 * Open Framer studio, and choose `File > New` from the top menu to create a new prototype.
+* Save the prototype to your desktop as `day-two.framer`
 * If you do not immediately see an iPhone 6s on the righthand side of the app, choose `Device > Apple iPhone 6s > iPhone 6s Silver`.
 * Click `Import`, choose `@2x` from the drop menu.
 * Click `import` to bring `day-two-ui.sketch` into Framer Studio.
