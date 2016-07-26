@@ -53,13 +53,20 @@ To the left of the `layerA = …` in your code, you'll notice a small square but
 
 If the handle is already highlighted (filled w/ a solid grey), great. If not, click the handle to highlight it. Now, turn your attention to Framer's center column. You should see the following:
 
-![handle](images/properties.png)
+![properties](images/properties.png)
 
 These are the properties of the selected layer. You can change any of these values as you would in a visual design tool. As you do, Framer will write the corresponding code for you in the lefthand column.
 
 Using this property inspector, change the border radius to `10`, the scale to `0.50` and change the background color to whatever you like (I've chosen a red color at `100%` opacity). Your code should look something like this:
 
-![handle](images/new-properties.png)
+```
+layerA = new Layer
+	x: 275
+	y: 567
+	borderRadius: 10
+	scale: 0.50
+	backgroundColor: "rgba(255,0,0,1)"
+```
 
 On the iPhone's screen, your layer should now look like this:
 
@@ -77,7 +84,13 @@ You are immediately taken back into edit mode, where you can again change the pr
 
 My code for this new state looks like this:
 
-![handle](images/add-state-code.png)
+```
+layerA.states.add
+	stateA:
+		backgroundColor: "rgba(255,255,255,1)"
+		scale: 2.00
+		rotation: 45
+```
 
 And my layer now looks like this:
 
@@ -139,7 +152,12 @@ You should now see `stateB` highlighted in your code editor, and you're already 
 
 For our `stateB` values, I've chosen a blue background color, `8.00` for the scale (_I had to enter this via my keyboard — the slider doesn't allow such a large input value_) and a rotation of `180`:
 
-![state b](images/state-b.png)
+```
+stateB:
+	backgroundColor: "rgba(0,61,255,1)"
+	scale: 8.00
+	rotation: 180
+```
 
 Now, when you interact with your layer, you'll see it cycle through its 3 states — default, `stateA` and `stateB` — each time you click. To see this on your phone, save your file (⌘ + S) in Framer Studio w/ your prototype open on your phone. You should see a blue load bar across the top of the Framer app on your phone to indicate that your changes have been published and the prototype is reloading.
 
@@ -192,17 +210,17 @@ Animated shapes are fun & all, but let's make a real prototype.
 ![Sketch Artboards](images/artboards.png)
 
 * Our prototype will transition between two views, `home_page` & `detail_page`
-* Active click/tap areas are blue, black/grey areas are not
-* The top status bar & bottom nav bars will be made to persist in code, so we only need them on the first (home_page) artboard.
+* Active click/tap areas are blue
+* The top status bar & bottom nav bars will be made to persist in code, so we only need them on the `home_page` artboard.
 
 #### Layers:
 
 ![Sketch Artboards](images/layer-order.png)
 
-* **Layer names:** use underscores in lieu of spaces or hyphens for consistency as Framer will rename them using underscores
-* **Layers arrangement:** top-to-bottom as they appear in the artboard (personal preference - easier to visually reference in framer)
-* **Sketch symbols:** Right click each and choose `Detach from Symbol` as Framer can't read these. This action converts symbols to layer groups.
-* **Layer groups:** groups will be flattened into a single layers. These can then be referenced in code by their group name
+* **Layer names:** use underscores in lieu of spaces or hyphens for consistency, as Framer will rename them using underscores
+* **Layers arrangement:** top-to-bottom as they appear in the artboard (personal preference - easier to visually reference in framer's tree structure & design views)
+* **Sketch symbols:** Framer can't read symbols. So, if your design uses them right-click each and choose `Detach from Symbol` to convert them into groups. _(Note: we're not using symbols in this design)_
+* **Layer groups:** groups are flattened into a single layers in Framer. These can then be referenced throughout Framer by their group name.
 
 > _Note: if you have made any adjustments to the file, make sure it is saved in its current state and that Sketch is not hidden before importing it into Framer Studio._
 
@@ -210,7 +228,8 @@ Animated shapes are fun & all, but let's make a real prototype.
 
 * Open Framer studio, and choose `File > New` from the top menu to create a new prototype.
 * If you do not immediately see an iPhone 6s on the righthand side of the app, choose `Device > Apple iPhone 6s > iPhone 6s Silver`.
-* Click `Import`, choose `@2x` from the drop menu and click `import` to bring `day-two-ui.sketch` into Framer Studio.
+* Click `Import`, choose `@2x` from the drop menu.
+* Click `import` to bring `day-two-ui.sketch` into Framer Studio.
 
 You should now see the following code denoting your imported file:
 
@@ -219,21 +238,25 @@ You should now see the following code denoting your imported file:
 sketch = Framer.Importer.load("imported/day-two-ui@2x")
 ```
 
-> _Note: the line beginning with a `#` is a code comment. These are helpful messages that are ignored by our prototype._
+* 2 Things to note:
+	1. the line beginning with a `#` is a code comment. These are helpful messages that are ignored by our prototype.
+	2. In our code, this `sketch` variable you see above will be prepended along with a `.` to the names of layers imported from our Sketch file. So, a layer called `home_page` from our Sketch document is referenced in code as `sketch.home_page`.
 
 * You should also see the hierarchy of your artboard & layer structure in Framer's center column, and the design on the iPhone's screen.
 
 ![Layer hierarchy](images/layer-hierarchy.png)
 
-* These layers will now be accessible via Framer's `Insert` menu for adding states and events, just as manually created layers are. These layers and groups also retain the hierarchy they had in Sketch. So, if we move `detail_page` in Framer, everything beneath it moves, as well. You can roll over layer names to see them highlighted in Framer's design view, even if they are off the stage.
+* These layers will now be accessible by name via Framer's `Insert` menu and can thus be affected with States and Events. The layers also retain their parent/child hierarchy as they had in Sketch (and as is illustrated in Framer's center column tree structure). As such, if we move `detail_page` in Framer, everything beneath it moves, as well.
 
-* With this in mind, and speaking of our `detail_page`, if you roll over it, you can see it's a little too far to the right. We want it right up against the right side of the screen and ready to animate when we transition from the home page to our detail page.
+> _Note: you can roll over layer names in the center column to see their positions highlighted in Framer's design view, even if they are off the phone's screen._
 
-* We need a state for this. Choose `Insert > State > detail_page`. Now, using the center column, set its x Position to 750, like this:
+* With the above note in mind, if you roll over the `detail_page`, you can see it's a little too far off to the right of our screen. We want it in position to immediately transition into view when we call for it.
+
+* For this, we need a state for our `detail_page` layer. Choose `Insert > State > detail_page`. Now, using the center column, set the x Position of our new state to 750, like this:
 
 ![Detail X Position](images/detail-xpos.png)
 
-* Now, we need one line of code to instantly set our `detail_page` to this state, with no animation or transition. Add this code beneath your state code, and be sure it's not indented:
+* We now need one line of code to instantly set our `detail_page` to this state, with no animation or transition. Add this code beneath your state code, and be sure it's not indented:
 
 ```
 # set initial detail_page position
@@ -242,7 +265,7 @@ sketch.detail_page.states.switchInstant("stateA")
 
 * If you now mouse over `detail_page` in Framer's center column, you'll see that it's right where we want it, ready to be transitioned into view.
 
-* To be sure we're aligned, the whole of your prototype's code should now read:
+* The whole of your prototype's code should now read:
 
 ```
 # Import file "day-two-ui" (sizes and positions are scaled 1:2)
@@ -256,8 +279,6 @@ sketch.detail_page.states.add
 sketch.detail_page.states.switchInstant("stateA")
 ```
 
-* First, we're importing the Sketch file, we're then creating `stateA` where our `detail_page` is at `750`, and lastly, we're immediately setting that state with Framer's `switchInstant` command.
-
 * We now need a new state where `detail_page` is in view, or at `0` x Position. Using our `Insert > State > detail_page` command, add a new state, and using the center column, add set the position to `0`. Its automatically inserted code should read:
 
 ```
@@ -265,7 +286,7 @@ stateB:
 	x: 0
 ```
 
-* Now, let's add some interactivity to our blue `layer_one` button on the `home_page` to slide our detail page into view. Choose `Insert > Event > label_one > Click > Click` and paste the following code beneath the resulting `sketch.label_one.onClick…` code:
+* Now, let's add some interactivity to our blue `label_one` button on the `home_page` to slide our detail page into view. Choose `Insert > Event > label_one > Click > Click` and paste the following code beneath the resulting `sketch.label_one.onClick…` code, being sure it's indented:
 
 ```
 sketch.detail_page.states.switch("stateB")
@@ -302,14 +323,16 @@ sketch.label_one.onClick (event, layer) ->
 
 * Now, when we click our blue label button on the home page, we see the `home_page` exit to the left as our `detail_page` makes its entrance.
 
-* Functionality-wise, all that's left is to afford our `back_button` layer on the Detail page the same functionality, only backwards. Choose `Insert > Event > back_button > Click > Click`, and add the following two lines of code to our resulting Click event:
+* Functionality-wise, all that's left is to afford our `back_button` layer on the Detail page the same functionality, only backwards. Choose `Insert > Event > back_button > Click > Click`, and add the following two lines of code to our resulting Click event, making sure they're indented:
 
 ```
 	sketch.detail_page.states.switch("stateA")
 	sketch.home_page.states.switch("stateB")
 ```
 
-* You should now be able to transition from the Home to the Detail page and back again using our two active buttons to which we've applied Click Events. All that's now left to apply is a little polish.
+* You should now be able to transition from the Home to the Detail page and back again using our two active buttons to which we've applied Click Events.
+
+#### A pair of remaining loose ends
 
 * First off, we want our `status_bar` and `bottom_tab_bar` layers to persist throughout, just as they would on a real iOS app. To achieve this, add the following two lines of code:
 
@@ -319,9 +342,47 @@ sketch.status_bar.superLayer = Framer.Device.screen
 sketch.bottom_tab_bar.superLayer = Framer.Device.screen
 ```
 
-* Now, all that's left is our transition — it's freakishly slow. The following two lines of code will set us right:
+* Now, all that's left is our transition — it's way too slow. The following two lines of code will set us right:
 
 ```
+# set our global transition animation time
+Framer.Defaults.Animation =
+    time: .4
+```
+
+And that's it! For reference, here's the entirety of the code for our prototype:
+
+```
+# Import file "day-two-ui" (sizes and positions are scaled 1:2)
+sketch = Framer.Importer.load("imported/day-two-ui@2x")
+
+sketch.detail_page.states.add
+	stateA:
+		x: 750
+	stateB:
+		x: 0
+
+# set initial detail_page position
+sketch.detail_page.states.switchInstant("stateA")
+
+sketch.label_one.onClick (event, layer) ->
+	sketch.detail_page.states.switch("stateB")
+	sketch.home_page.states.switch("stateA")
+
+sketch.home_page.states.add
+	stateA:
+		x: -750
+	stateB:
+		x: 0
+
+sketch.back_button.onClick (event, layer) ->
+	sketch.detail_page.states.switch("stateA")
+	sketch.home_page.states.switch("stateB")
+
+# make status & nav bars persistent
+sketch.status_bar.superLayer = Framer.Device.screen
+sketch.bottom_tab_bar.superLayer = Framer.Device.screen
+
 # set our global transition animation time
 Framer.Defaults.Animation =
     time: .4
